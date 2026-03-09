@@ -49,7 +49,14 @@ def compile_cobol(src: Path, out_dir: Path) -> Path:
     if result.returncode != 0:
         pytest.fail(f"cobc failed for {src.name}:\n{result.stderr}")
 
-    candidates = list(out_dir.glob(f"*{_lib_ext()}"))
+    prog_name = src.stem.lower()
+    candidates = list(out_dir.glob(f"{prog_name}{_lib_ext()}"))
+    if not candidates:
+        # Fallback: try any library that isn't the bridges stub
+        candidates = [
+            p for p in out_dir.glob(f"*{_lib_ext()}")
+            if p.stem.lower() != "bridges"
+        ]
     assert candidates, f"No compiled library found in {out_dir}"
     return candidates[0]
 
