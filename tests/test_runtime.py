@@ -63,13 +63,16 @@ def compile_cobol(src: Path, out_dir: Path) -> Path:
 
 _libcob_initialized = False
 
+LIBCOB = ctypes.util.find_library("cob")
+
+
 def _ensure_cob_init():
     global _libcob_initialized
     if _libcob_initialized:
         return
-    libcob_name = ctypes.util.find_library("cob")
-    assert libcob_name, "libcob not found"
-    ctypes.CDLL(libcob_name, mode=ctypes.RTLD_GLOBAL).cob_init(0, None)
+    if not LIBCOB:
+        pytest.skip("libcob (GnuCOBOL runtime) not found — skipping native tests")
+    ctypes.CDLL(LIBCOB, mode=ctypes.RTLD_GLOBAL).cob_init(0, None)
     _libcob_initialized = True
 
 
