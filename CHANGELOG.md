@@ -11,6 +11,15 @@ Versioning: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.0.1] — 2026-03-09
+
+### Fixed
+
+- CI: Added `httpx` to dev dependencies (required by FastAPI TestClient)
+- CI: Skip native runtime tests when `libcob` is not available on macOS runners
+- CI: Fixed compiled library discovery filtering out `bridges.so` stub
+- Lint: Fixed all ruff warnings (import sorting, trailing whitespace, ambiguous variable names)
+
 ## [1.0.0] — 2026-03-09
 
 ### Added
@@ -39,5 +48,6 @@ Versioning: [Semantic Versioning](https://semver.org/)
 - COBOL source validation rejects non-COBOL files with helpful error messages
 - Generated API returns proper HTTP error codes (400, 404, 413, 500, 503)
 
-[Unreleased]: https://github.com/kossisoroyce/cobol-wrap/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/kossisoroyce/cobol-wrap/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/kossisoroyce/cobol-wrap/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/kossisoroyce/cobol-wrap/releases/tag/v1.0.0

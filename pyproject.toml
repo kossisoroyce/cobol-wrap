@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cobol-wrap"
-version = "1.0.0"
+version = "1.0.1"
 description = "Auto-generate production REST APIs from COBOL source files — one command to load, one command to serve"
 readme = "README.md"
 requires-python = ">=3.9"
