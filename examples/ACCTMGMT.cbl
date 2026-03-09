@@ -1,0 +1,31 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ACCTMGMT.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT CUSTOMER-FILE ASSIGN TO 'customers.dat'
+               ORGANIZATION IS SEQUENTIAL.
+
+       DATA DIVISION.
+       FILE SECTION.
+       FD CUSTOMER-FILE.
+       01 CUSTOMER-RECORD.
+          05 CUST-ID         PIC 9(8).
+          05 CUST-NAME       PIC X(40).
+          05 CUST-BALANCE    PIC 9(10)V99.
+          05 CUST-STATUS     PIC X(1).
+
+       WORKING-STORAGE SECTION.
+       01 WS-TEMP-VAR        PIC X(10).
+
+       LINKAGE SECTION.
+       01 ACCT-ID            PIC 9(8).
+       01 ACCT-BALANCE       PIC 9(10)V99.
+       01 RETURN-CODE        PIC 9(2).
+
+       PROCEDURE DIVISION USING ACCT-ID ACCT-BALANCE RETURN-CODE.
+       GET-ACCOUNT.
+           DISPLAY "Fetching account " ACCT-ID.
+           MOVE 0 TO RETURN-CODE.
+           GOBACK.

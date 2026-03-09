@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.benchmarks/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.mypy_cache/
+
+# Generated API output (user-specific)
+cobol-api/
+
+# COBOL compiled artifacts
+*.dylib
+*.o

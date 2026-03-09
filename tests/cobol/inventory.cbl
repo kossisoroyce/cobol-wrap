@@ -1,0 +1,41 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. INVMGMT.
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT INVENTORY-FILE ASSIGN TO 'inventory.dat'
+               ORGANIZATION IS SEQUENTIAL.
+
+       DATA DIVISION.
+       FILE SECTION.
+       FD INVENTORY-FILE.
+       01 INVENTORY-RECORD.
+          05 ITEM-CODE         PIC X(8).
+          05 ITEM-DESC         PIC X(40).
+          05 UNIT-PRICE        PIC 9(6)V99 COMP-3.
+          05 QUANTITY-ON-HAND  PIC 9(6).
+          05 REORDER-LEVEL     PIC 9(6).
+          05 ITEM-STATUS       PIC X(1).
+             88 IN-STOCK       VALUE 'A'.
+             88 DISCONTINUED   VALUE 'D'.
+             88 BACKORDERED     VALUE 'B'.
+
+       WORKING-STORAGE SECTION.
+       01 WS-TOTALS.
+          05 WS-TOTAL-ITEMS    PIC 9(6).
+          05 WS-TOTAL-VALUE    PIC 9(12)V99 COMP-3.
+       01 WS-EOF-FLAG          PIC X(1).
+          88 END-OF-FILE       VALUE 'Y'.
+
+       LINKAGE SECTION.
+       01 LK-ITEM-CODE         PIC X(8).
+       01 LK-QUANTITY          PIC 9(6).
+       01 LK-RETURN-CODE       PIC S9(2).
+
+       PROCEDURE DIVISION USING LK-ITEM-CODE LK-QUANTITY LK-RETURN-CODE.
+       UPDATE-INVENTORY.
+           MOVE 'N' TO WS-EOF-FLAG.
+           MOVE 0 TO LK-RETURN-CODE.
+           MOVE 0 TO WS-TOTAL-ITEMS.
+           GOBACK.

@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+include pyproject.toml
+recursive-include cobol_wrap *.py py.typed
+recursive-include cobol_wrap/dashboard *.html *.css *.js

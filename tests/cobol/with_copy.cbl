@@ -1,0 +1,19 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. ADDRBOOK.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-CONTACT.
+          05 CONTACT-ID        PIC 9(8).
+          05 CONTACT-NAME      PIC X(50).
+          COPY ADDRESS.
+          05 CONTACT-PHONE     PIC X(15).
+
+       LINKAGE SECTION.
+       01 LK-CONTACT-ID        PIC 9(8).
+       01 LK-FOUND-FLAG        PIC X(1).
+
+       PROCEDURE DIVISION USING LK-CONTACT-ID LK-FOUND-FLAG.
+       LOOKUP-CONTACT.
+           MOVE 'N' TO LK-FOUND-FLAG.
+           GOBACK.

@@ -1,0 +1,25 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. MAPPROC.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-MAP-DATA          PIC X(1920).
+       01 WS-RESP-CODE         PIC S9(8) COMP.
+
+       LINKAGE SECTION.
+       01 LK-TRANSACTION-ID    PIC X(4).
+       01 LK-RESPONSE          PIC S9(4).
+
+       PROCEDURE DIVISION USING LK-TRANSACTION-ID LK-RESPONSE.
+       HANDLE-SCREEN.
+           EXEC CICS RECEIVE
+               MAP('ACCTMAP')
+               MAPSET('ACCTSET')
+               INTO(WS-MAP-DATA)
+               RESP(WS-RESP-CODE)
+           END-EXEC.
+           MOVE 0 TO LK-RESPONSE.
+           EXEC CICS RETURN
+               TRANSID(LK-TRANSACTION-ID)
+           END-EXEC.
+           GOBACK.

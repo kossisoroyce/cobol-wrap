@@ -1,0 +1,38 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. PAYROLL.
+
+       DATA DIVISION.
+       WORKING-STORAGE SECTION.
+       01 WS-EMPLOYEE-DATA.
+          05 WS-EMP-ID         PIC 9(6).
+          05 WS-EMP-NAME       PIC X(30).
+          05 WS-HOURS-WORKED   PIC 9(3)V9(2).
+          05 WS-HOURLY-RATE    PIC 9(4)V99 COMP-3.
+          05 WS-GROSS-PAY      PIC 9(8)V99 COMP-3.
+          05 WS-TAX-RATE       PIC 9(2)V99.
+          05 WS-NET-PAY        PIC 9(8)V99 COMP-3.
+          05 WS-STATUS         PIC X(1).
+             88 FULL-TIME      VALUE 'F'.
+             88 PART-TIME      VALUE 'P'.
+             88 CONTRACTOR     VALUE 'C'.
+       01 WS-TAX-TABLE.
+          05 WS-TAX-BRACKET    OCCURS 5 TIMES.
+             10 WS-MIN-INCOME  PIC 9(8)V99 COMP-3.
+             10 WS-TAX-PCT     PIC 9(2)V99.
+       01 WS-RETURN-CODE       PIC S9(4) COMP.
+
+       LINKAGE SECTION.
+       01 LK-EMP-ID            PIC 9(6).
+       01 LK-HOURS             PIC 9(3)V99.
+       01 LK-RATE              PIC 9(4)V99.
+       01 LK-NET-PAY           PIC 9(8)V99.
+       01 LK-STATUS-CODE       PIC S9(2).
+
+       PROCEDURE DIVISION USING LK-EMP-ID LK-HOURS LK-RATE LK-NET-PAY LK-STATUS-CODE.
+       CALC-PAYROLL.
+           MULTIPLY LK-HOURS BY LK-RATE GIVING WS-GROSS-PAY.
+           MOVE 0.25 TO WS-TAX-RATE.
+           MULTIPLY WS-GROSS-PAY BY WS-TAX-RATE GIVING WS-NET-PAY.
+           SUBTRACT WS-NET-PAY FROM WS-GROSS-PAY GIVING LK-NET-PAY.
+           MOVE 0 TO LK-STATUS-CODE.
+           GOBACK.
