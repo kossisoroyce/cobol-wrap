@@ -8,9 +8,9 @@ and optional GraphQL / Kafka / telemetry layers.
 
 __version__ = "1.0.0"
 
-import os
 import logging
-from typing import Optional, Callable, Dict, Any
+import os
+from typing import Any, Callable, Dict, Optional
 
 logger = logging.getLogger("cobol_wrap")
 
@@ -37,10 +37,10 @@ def wrap(
 
     Returns a summary dict with counts and metadata for the CLI to display.
     """
-    from .parser import CobolParser
-    from .mapper import TypeMapper
-    from .emitter import OpenAPIEmitter, ServerEmitter
     from .bridge import FlatFileBridgeEmitter
+    from .emitter import OpenAPIEmitter, ServerEmitter
+    from .mapper import TypeMapper
+    from .parser import CobolParser
 
     def _progress(msg: str):
         logger.info(msg)

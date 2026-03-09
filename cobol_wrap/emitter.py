@@ -1,8 +1,10 @@
-import re
-import yaml
 import os
+import re
+from typing import Any, Dict
+
+import yaml
+
 from .ast import CobolProgram, DataField
-from typing import Dict, Any
 
 
 def _field_to_schema(field: DataField) -> Dict[str, Any]:
@@ -257,10 +259,10 @@ class ServerEmitter:
 
         procedure_code = f"""from fastapi import APIRouter
 from models import *
-{f'from opentelemetry import trace' if getattr(self, 'telemetry', False) else ''}
+{'from opentelemetry import trace' if getattr(self, 'telemetry', False) else ''}
 
 router = APIRouter()
-{f'tracer = trace.get_tracer(__name__)' if getattr(self, 'telemetry', False) else ''}
+{'tracer = trace.get_tracer(__name__)' if getattr(self, 'telemetry', False) else ''}
 """
         procedure_code += f"""
 import os

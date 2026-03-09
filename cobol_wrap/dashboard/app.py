@@ -1,9 +1,9 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
 import os
 import shutil
-import json
 from pathlib import Path
+
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 
 app = FastAPI(title="cobol-wrap Local Dashboard", description="Visual UI for interacting with locally compiled COBOL binaries.")
 

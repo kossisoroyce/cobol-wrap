@@ -1,7 +1,9 @@
 import re
-from typing import Dict, Any, Type
-from pydantic import create_model, Field, BaseModel
 from decimal import Decimal
+from typing import Any, Dict, Type
+
+from pydantic import BaseModel, Field, create_model
+
 from .ast import CobolProgram, DataField
 
 
@@ -201,7 +203,7 @@ class TypeMapper:
 
         for name, model in self.models.items():
             lines.append(f"class {name}(BaseModel):")
-            lines.append(f"    model_config = ConfigDict(populate_by_name=True)")
+            lines.append("    model_config = ConfigDict(populate_by_name=True)")
             lines.append("")
             for field_name, model_field in model.model_fields.items():
 

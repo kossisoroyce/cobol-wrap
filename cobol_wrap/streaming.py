@@ -1,5 +1,7 @@
 import os
+
 from .ast import CobolProgram
+
 
 class StreamingEmitter:
     """ Generates FastStream Kafka consumers for the COBOL execution logic. """
@@ -9,7 +11,7 @@ class StreamingEmitter:
     def emit(self, output_dir: str):
         routes_dir = os.path.join(output_dir, "routes")
         os.makedirs(routes_dir, exist_ok=True)
-        
+
         lines = [
             "from faststream import FastStream",
             "from faststream.kafka import KafkaBroker",
@@ -27,7 +29,7 @@ class StreamingEmitter:
             func_name = ep.name.lower().replace("-", "_")
             in_topic = f"cobol.{app_name}.{func_name}.in"
             out_topic = f"cobol.{app_name}.{func_name}.out"
-            
+
             lines.append(f"@broker.subscriber('{in_topic}')")
             lines.append(f"@broker.publisher('{out_topic}')")
             lines.append(f"async def process_{func_name}(payload: dict):")

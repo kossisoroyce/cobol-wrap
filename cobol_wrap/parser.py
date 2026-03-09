@@ -1,8 +1,9 @@
+import logging
 import os
 import re
-import logging
 from pathlib import Path
-from .ast import CobolProgram, DataField, EntryPoint, FD
+
+from .ast import FD, CobolProgram, DataField, EntryPoint
 
 logger = logging.getLogger(__name__)
 

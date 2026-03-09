@@ -5,22 +5,20 @@ Load, serve, inspect, and manage COBOL programs as REST APIs
 from your terminal. Designed to feel warm, helpful, and intuitive.
 """
 
-import typer
+import datetime
+import logging
 import os
-import sys
 import shutil
 import subprocess
-import logging
-import datetime
 from pathlib import Path
 
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.text import Text
+import typer
 from rich import box
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 
-from cobol_wrap import __version__, COBOL_EXTENSIONS
+from cobol_wrap import COBOL_EXTENSIONS, __version__
 
 console = Console()
 MODELS_DIR = os.path.expanduser("~/.cobol-wrap/models")
@@ -219,7 +217,7 @@ def load(
         )
 
         # Compile the native binary
-        console.print(f"  [dim]Compiling native GnuCOBOL binary...[/dim]")
+        console.print("  [dim]Compiling native GnuCOBOL binary...[/dim]")
         runtime_dir = os.path.join(output_dir, "runtime")
         compile_res = subprocess.run(
             ["bash", "compile.sh", f"{model_name}.cbl"],
@@ -228,13 +226,13 @@ def load(
 
         compiled_ok = compile_res.returncode == 0
         if not compiled_ok:
-            console.print(f"  [yellow]Native compilation skipped or failed.[/yellow]")
+            console.print("  [yellow]Native compilation skipped or failed.[/yellow]")
             if shutil.which("cobc") is None:
-                console.print(f"  [dim]GnuCOBOL (cobc) is not installed. "
-                              f"The API will still work but the /{{endpoint}} routes will return 503 "
-                              f"until you compile the binary.[/dim]")
-                console.print(f"  [dim]Install: brew install gnucobol (macOS) or "
-                              f"apt install gnucobol (Linux)[/dim]")
+                console.print("  [dim]GnuCOBOL (cobc) is not installed. "
+                              "The API will still work but the /{endpoint} routes will return 503 "
+                              "until you compile the binary.[/dim]")
+                console.print("  [dim]Install: brew install gnucobol (macOS) or "
+                              "apt install gnucobol (Linux)[/dim]")
             else:
                 console.print(f"  [dim]{compile_res.stderr.strip()}[/dim]")
 
@@ -340,8 +338,8 @@ def serve(
 
     if not compiled:
         console.print()
-        console.print(f"  [yellow]Note:[/yellow] Native binary not compiled. "
-                      f"Procedure routes will return HTTP 503.")
+        console.print("  [yellow]Note:[/yellow] Native binary not compiled. "
+                      "Procedure routes will return HTTP 503.")
         console.print(f"  [dim]Run: cd {model_dir}/runtime && bash compile.sh {name}.cbl[/dim]")
 
     console.print()
@@ -591,7 +589,7 @@ def ui(port: int = typer.Option(3000, "--port", "-p", help="Port for the dashboa
     console.print()
     console.print(f"  [bold cyan]Starting cobol-wrap Dashboard[/bold cyan] "
                   f"on [bold]http://localhost:{port}[/bold]")
-    console.print(f"  Press [bold]Ctrl+C[/bold] to stop.\n")
+    console.print("  Press [bold]Ctrl+C[/bold] to stop.\n")
     try:
         subprocess.run([
             "python", "-m", "uvicorn",

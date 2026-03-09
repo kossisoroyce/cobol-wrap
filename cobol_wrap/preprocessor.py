@@ -1,6 +1,7 @@
-import re
 import os
+import re
 from tempfile import NamedTemporaryFile
+
 
 class CobolPreprocessor:
     """
@@ -41,18 +42,18 @@ class CobolPreprocessor:
                 if "END-EXEC" in line_upper:
                     call_id = len(self.sql_operations)
                     self._parse_sql_buffer(sql_buffer)
-                    processed_lines.append(f"           CALL 'SQL-BRIDGE'.\n")
+                    processed_lines.append("           CALL 'SQL-BRIDGE'.\n")
                 else:
                     in_sql = True
                 continue
-                
+
             if in_sql:
                 if "END-EXEC" in line_upper:
                     in_sql = False
                     sql_buffer.append(line)
                     call_id = len(self.sql_operations)
                     self._parse_sql_buffer(sql_buffer)
-                    processed_lines.append(f"           CALL 'SQL-BRIDGE'.\n")
+                    processed_lines.append("           CALL 'SQL-BRIDGE'.\n")
                 else:
                     sql_buffer.append(line)
                 continue
@@ -63,18 +64,18 @@ class CobolPreprocessor:
                 if "END-EXEC" in line_upper:
                     call_id = len(self.cics_operations)
                     self._parse_cics_buffer(cics_buffer)
-                    processed_lines.append(f"           CALL 'CICS-BRIDGE'.\n")
+                    processed_lines.append("           CALL 'CICS-BRIDGE'.\n")
                 else:
                     in_cics = True
                 continue
-                
+
             if in_cics:
                 if "END-EXEC" in line_upper:
                     in_cics = False
                     cics_buffer.append(line)
                     call_id = len(self.cics_operations)
                     self._parse_cics_buffer(cics_buffer)
-                    processed_lines.append(f"           CALL 'CICS-BRIDGE'.\n")
+                    processed_lines.append("           CALL 'CICS-BRIDGE'.\n")
                 else:
                     cics_buffer.append(line)
                 continue
@@ -88,7 +89,7 @@ class CobolPreprocessor:
         finally:
             tmp.close()
         return tmp.name
-        
+
     def _resolve_copybook(self, name: str) -> list:
         """ Searches copybook dirs for <name>.cpy, <name>.cbl, or just <name> """
         extensions = [".cpy", ".cbl", ""]
@@ -98,17 +99,17 @@ class CobolPreprocessor:
                 if os.path.exists(p):
                     with open(p, 'r') as f:
                         return f.readlines()
-        
+
         # If not found, return a comment indicating unresolved
         return [f"      * UNRESOLVED COPY: {name}\n"]
 
     def _parse_sql_buffer(self, buffer: list):
         # Extract the SELECT/INSERT and the host variables :VAR
-        query = " ".join([l.strip() for l in buffer])
+        query = " ".join([line.strip() for line in buffer])
         host_vars = re.findall(r':([A-Z0-9\-]+)', query)
         self.sql_operations.append({"query": query, "host_vars": host_vars})
 
     def _parse_cics_buffer(self, buffer: list):
         # Extract CICS commands like RECEIVE MAP, SEND MAP, RETURN
-        cmd = " ".join([l.strip() for l in buffer])
+        cmd = " ".join([line.strip() for line in buffer])
         self.cics_operations.append({"command": cmd})

@@ -1,5 +1,7 @@
 import os
+
 from .ast import CobolProgram
+
 
 class GraphQLEmitter:
     """ Generates a Strawberry GraphQL API representing the COBOL AST. """
@@ -10,7 +12,7 @@ class GraphQLEmitter:
     def emit(self, output_dir: str):
         routes_dir = os.path.join(output_dir, "routes")
         os.makedirs(routes_dir, exist_ok=True)
-        
+
         lines = [
             "import strawberry",
             "from typing import List, Optional",
@@ -21,12 +23,12 @@ class GraphQLEmitter:
 
         # 1. Generate Strawberry Types from Pydantic Models
         # For simplicity, we decorate the generated Pydantic models directly if possible,
-        # but Strawberry requires its own `@strawberry.type` classes usually. 
+        # but Strawberry requires its own `@strawberry.type` classes usually.
         # We will emit wrapper types.
         for name, model in self.models.items():
             lines.append(f"@strawberry.experimental.pydantic.type(model={name}, all_fields=True)")
             lines.append(f"class {name}GQL:")
-            lines.append(f"    pass\n")
+            lines.append("    pass\n")
 
         # 2. Generate Query and Mutation Root
         lines.append("@strawberry.type")
@@ -37,13 +39,13 @@ class GraphQLEmitter:
 
         lines.append("@strawberry.type")
         lines.append("class Mutation:")
-        
+
         # Add Mutations for every EntryPoint
         for ep in self.program.procedure_division:
             req_name = f"{ep.name.replace('-', '').capitalize()}Request"
             res_name = f"{ep.name.replace('-', '').capitalize()}Response"
             func_name = ep.name.lower().replace("-", "_")
-            
+
             lines.append("    @strawberry.mutation")
             lines.append(f"    def {func_name}(self, payload: strawberry.scalars.JSON) -> strawberry.scalars.JSON:")
             lines.append("        import os")

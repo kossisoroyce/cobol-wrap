@@ -1,7 +1,6 @@
 import os
 import re
 import shutil
-from typing import List, Dict
 
 
 class RuntimePackager:
@@ -321,7 +320,7 @@ CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]
                 struct_name = f"Root_{param.replace('-', '_')}_Struct"
                 var_name = f"arg_{param.replace('-', '_')}"
                 lines.append(f"            {var_name} = {struct_name}()")
-                lines.append(f"            if payload:")
+                lines.append("            if payload:")
                 lines.append(f"                self._dict_to_struct(payload, {var_name})")
                 arg_names.append(f"ctypes.byref({var_name})")
 
@@ -330,7 +329,7 @@ CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]
                 var_name = f"arg_{param.replace('-', '_')}"
                 lines.append(f"            result.update(self._struct_to_dict({var_name}))")
 
-            lines.append(f"            return result")
+            lines.append("            return result")
 
         lines.append("        return {'status': 'success', 'note': f'Executed {entry_point} with generic payload but no mapped parameters.'}")
         return "\n".join(lines)
